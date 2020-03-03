@@ -1,0 +1,158 @@
+﻿<%@ Master Language="C#" AutoEventWireup="true" CodeBehind="base.master.cs" Inherits="MovieWebDemo._base" %>
+
+<!DOCTYPE html>
+
+<html>
+<head runat="server">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <asp:ContentPlaceHolder ID="head_CPH" runat="server">
+    </asp:ContentPlaceHolder>
+    <meta charset="utf-8">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="keywords" content="">
+    <meta name="description" content="">
+    <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="css/style.css">
+    <link rel="stylesheet" type="text/css" href="css/font-awesome.min.css">
+    <link rel="shortcut icon" href="images/favicon.ico">
+    <script src="js/jquery-2.1.4.min.js"></script>
+    <script src="js/nprogress.js"></script>
+    <script src="js/jquery.lazyload.min.js"></script>
+</head>
+
+<body class="user-select">
+    <header class="header">
+        <nav class="navbar navbar-default" id="navbar">
+            <div class="container">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#header-navbar" aria-expanded="false">
+                        <span class="sr-only"></span><span class="icon-bar"></span>
+                        <span class="icon-bar"></span><span class="icon-bar"></span>
+                    </button>
+                    <a href="#">
+                        <img style="width: 10%; height: 10%" src="images/box.png">
+                    </a>
+                </div>
+                <div class="collapse navbar-collapse" id="header-navbar">
+                    <form class="navbar-form visible-xs">
+                        <div class="input-group">
+                            <input type="text" id="keyword2" name="kw" class="form-control" placeholder="请输入关键字" maxlength="20" autocomplete="off">
+                            <span class="input-group-btn">
+                                <button class="btn btn-search" onclick="search2()" type="submit">搜索</button>
+                            </span>
+                        </div>
+                    </form>
+                    <ul id="navigation" class="nav navbar-nav navbar-right">
+                        <li><a href="index.aspx">首页</a></li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
+    <section class="container">
+        <form runat="server">
+            <asp:ScriptManager ID="ScriptManager1" runat="server" EnablePageMethods="True"></asp:ScriptManager>
+            <asp:ContentPlaceHolder ID="content_CPH" runat="server">
+            </asp:ContentPlaceHolder>
+        </form>
+        <aside class="sidebar">
+            <div class="fixed">
+                <div class="widget widget-tabs">
+                    <ul class="nav nav-tabs" role="tablist">
+                        <li role="presentation" class="active"><a href="#detail_01" aria-controls="detail_01" role="tab" data-toggle="tab">用户信息</a></li>
+                        <li role="presentation"><a href="#detail_02" aria-controls="detail_02" role="tab" data-toggle="tab">账户详情</a></li>
+                    </ul>
+                    <div class="tab-content">
+                        <div id="detail_01" role="tabpanel" class="tab-pane contact active" style="text-align: center">
+                            <div><a id="uname_detail_01"></a></div>
+                            <div class="ProfileSideCreator-analytics">
+                                <div class="ProfileSideCreator-readCountItem">
+                                    <a  id="accessname"></a>
+                                </div>
+                                <div class="ProfileSideCreator-readCountItem" style="border-right: none;">
+                                    <a onclick="logout()" style="cursor: pointer; color: #3399CC">退出登录</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="detail_02" role="tabpanel" class="tab-pane contact" style="text-align: center">
+                            <div><a id="uname_detail_02"></a></div>
+                            <div class="ProfileSideCreator-analytics">
+                                <div class="ProfileSideCreator-readCountItem">
+                                    <a href="user_backstage.aspx" style="cursor: pointer; color: #3399CC">账户后台</a>
+                                </div>
+                                <div class="ProfileSideCreator-readCountItem" style="border-right: none;">
+                                    <a href="order_list.aspx" style="cursor: pointer; color: #3399CC">订单记录</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="widget widget_search">
+                    <form class="navbar-form" action="/search_result.aspx" method="post">
+                        <div class="input-group">
+                            <input type="text" id="keyword" name="kw" class="form-control" size="35" placeholder="请输入关键字" autocomplete="off" />
+                            <span class="input-group-btn">
+                                <button class="btn btn-search" onclick="search()" type="submit">搜索</button>
+                            </span>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </aside>
+    </section>
+    <footer class="footer">
+    </footer>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/jquery.ias.js"></script>
+    <script src="https://cdn.bootcss.com/jquery/3.4.1/jquery.js"></script>
+    <script>
+        $(document).ready(function () {
+            var username = '<%=Session["username"]%>';
+            var accessname = '<%=Session["accessname"]%>';
+            var account = '<%=Session["account"]%>';
+            if (username.length < 1) {
+                var na_text = '<li><a href="login.aspx">登录</a></li>';
+                var no_text = '<a style="text-align:center">未<a style="color:#3399CC" href="login.aspx">登录</a></a>';
+                document.getElementById("detail_01").innerHTML = no_text;
+            }
+            else {
+                //顶部栏
+                var na_text = '<li><a href="#">' + username + '</a></li>' +
+                    '<li><a onclick="logout()">注销</a></li>';
+                document.getElementById("accessname").innerHTML = accessname;
+                if (accessname == '管理员') {
+                    document.getElementById("accessname").setAttribute('href', 'admin_backstage.aspx');
+                    document.getElementById("accessname").setAttribute('style', 'cursor: pointer; color: #3399CC');
+                    document.getElementById("accessname").innerHTML = '管理后台';
+                }
+                document.getElementById("uname_detail_01").innerHTML = username;
+                document.getElementById("uname_detail_02").innerHTML = username;
+            }
+            document.getElementById("navigation").innerHTML += na_text;
+        })
+    </script>
+    <script>
+        function logout() { //注销(用webmethod调用后台cs方法)
+            PageMethods.Logout("", logoutCallComplete, logoutCallError);
+        }
+        function logoutCallComplete(result, userContext, methodName) {
+            location.reload();
+        }
+        function logoutCallError(error, userContext, methodName) {
+        }
+        function getQueryVariable(variable) {
+            var query = window.location.search.substring(1);
+            var vars = query.split("&");
+            for (var i = 0; i < vars.length; i++) {
+                var pair = vars[i].split("=");
+                if (pair[0] == variable) { return pair[1]; }
+            }
+            return (false);
+        }
+    </script>
+    <asp:ContentPlaceHolder ID="script_CPH" runat="server">
+    </asp:ContentPlaceHolder>
+</body>
+</html>
