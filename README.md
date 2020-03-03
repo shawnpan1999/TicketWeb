@@ -16,11 +16,11 @@
 
    支持充值等功能
 
-   ![](http://psw.life/imgCloud/img/GIF 2019-12-20 12-25-53.gif)
+   ![](http://psw.life/imgCloud/img/GIF_2019-12-20_12-25-53.gif)
 
 4. 选座购票
 
    基于 `jQuery` 完成的选座功能
 
-   ![](http://psw.life/imgCloud/img/GIF 2019-12-20 12-13-22.gif)
+   ![](http://psw.life/imgCloud/img/GIF_2019-12-20_12-13-22.gif)
 
